@@ -20,7 +20,7 @@ class ImageSync
 
   end
 
-  def get_default_image partname
+  def _get_default_image partname
     [@images_folder + "default/#{partname}.jpg"]
   end
 
@@ -29,7 +29,7 @@ class ImageSync
     if img_ids.size > 0
       _get_by_resolution img_ids, resolution
     else
-      get_default_image 'turbo'
+      _get_default_image 'turbo'
     end
   end
 
@@ -38,8 +38,12 @@ class ImageSync
     if sku
       images  =  _find_images partname, sku, resolution
     else
-       images = get_default_image('turbo')
+       images = _get_default_image('turbo')
     end
     images[0]
+  end
+
+  def get_default_image
+    @images_folder + "default/#{partname}.jpg"
   end
 end

@@ -18,6 +18,11 @@ get '/part/:partname/product/image/:resolution' do
   send_file(settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution]), :filename => 'image', :type => 'Application/octet-stream')
 end
 
+not_found do
+  send_file(settings.image_syncer.get_default_image)
+end
+
+
 get '*' do
   'uknown route'
 end
