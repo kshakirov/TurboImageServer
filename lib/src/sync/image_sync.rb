@@ -16,21 +16,30 @@ class ImageSync
 
   end
 
-  def get_default_image sku
-    @images_folder + "#{resolution}/turbo.jpg"
+  def get_part_type_name sku
+
   end
 
-  def _find_images  sku, resolution
+  def get_default_image partname
+    [@images_folder + "default/#{partname}.jpg"]
+  end
+
+  def _find_images  partname, sku, resolution
     img_ids = ProductImage.where part_id: sku
-    if img_ids
+    if img_ids.size > 0
       _get_by_resolution img_ids, resolution
     else
-      get_default_image sku
+      get_default_image 'turbo'
     end
   end
 
-  def get_image sku, resolution='1000'
-    images  =  _find_images sku, resolution
+  def get_image partname, sku, resolution='1000'
+    images = []
+    if sku
+      images  =  _find_images partname, sku, resolution
+    else
+       images = get_default_image('turbo')
+    end
     images[0]
   end
 end
