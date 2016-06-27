@@ -12,13 +12,20 @@ class ImageSync
     image_filenames
   end
 
+  def get_part_type_specific_image sku
+
+  end
+
+  def get_default_image sku
+    @images_folder + "#{resolution}/turbo.jpg"
+  end
 
   def _find_images  sku, resolution
     img_ids = ProductImage.where part_id: sku
     if img_ids
       _get_by_resolution img_ids, resolution
     else
-
+      get_default_image sku
     end
   end
 
