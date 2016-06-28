@@ -20,8 +20,16 @@ class ImageSync
 
   end
 
+
+  def normalize_partname partname
+    n = URI.unescape partname
+    n = n.remove(" ")
+    n.underscore
+  end
+
   def _get_default_image partname
-    [@images_folder + "default/#{partname}.jpg"]
+    pname = normalize_partname partname
+    ["public/default/#{pname}.jpg"]
   end
 
   def _find_images  partname, sku, resolution
@@ -29,7 +37,7 @@ class ImageSync
     if img_ids.size > 0
       _get_by_resolution img_ids, resolution
     else
-      _get_default_image 'turbo'
+      _get_default_image partname
     end
   end
 
@@ -38,12 +46,13 @@ class ImageSync
     if sku
       images  =  _find_images partname, sku, resolution
     else
-       images = _get_default_image('turbo')
+       images = _get_default_image partname
     end
     images[0]
   end
 
-  def get_default_image
-    @images_folder + "default/#{partname}.jpg"
+  def get_default_image partname
+    pname = normalize_partname partname
+    @images_folder + "default/#{pname}.jpg"
   end
 end

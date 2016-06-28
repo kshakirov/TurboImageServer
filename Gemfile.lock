@@ -52,6 +52,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   activerecord-jdbcmysql-adapter
+  activesupport
   composite_primary_keys (> 8.0.0)
   rake
   sinatra

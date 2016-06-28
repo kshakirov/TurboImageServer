@@ -1,5 +1,8 @@
 require 'sinatra'
-require_relative 'image_server_helper'
+require "sinatra/activerecord"
+require 'uri'
+require 'active_support/all'
+require_relative 'lib/src/sync'
 
 set :bind, '0.0.0.0'
 set :port, 4570
@@ -19,7 +22,7 @@ get '/part/:partname/product/image/:resolution' do
 end
 
 not_found do
-  send_file(settings.image_syncer.get_default_image)
+  send_file(settings.image_syncer.get_default_image params[:partname])
 end
 
 
