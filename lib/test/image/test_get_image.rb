@@ -16,4 +16,11 @@ class TestImage < MiniTest::Unit::TestCase
     assert_equal "/var/product_images/resized/default/turbo.jpg",   images2, "not equal"
 
   end
+
+
+  def test_gallery
+    syncer = ImageSync.new ENV['METADATA_IMAGES_COLLECTION']
+    images = syncer.find_images_list 48405, 50
+    p images
+  end
 end

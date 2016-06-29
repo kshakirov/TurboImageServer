@@ -21,6 +21,16 @@ get '/part/:partname/product/image/:resolution' do
   send_file(settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution]), :filename => 'image', :type => 'Application/octet-stream')
 end
 
+get '/product/:sku/image_gallary/:resolution' do
+  settings.image_syncer.get_images_list params[:sku], params[:resolution]
+end
+
+get '/product/:sku/resolution/:resolution/image/:id' do
+  image = settings.image_syncer.get_image_file params[:sku], params[:resolution], params[:id]
+  send_file(image, :filename => image, :type => 'Application/octet-stream')
+end
+
+
 not_found do
   send_file(settings.image_syncer.get_default_image params[:partname])
 end

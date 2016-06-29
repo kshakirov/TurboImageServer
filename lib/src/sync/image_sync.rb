@@ -12,6 +12,18 @@ class ImageSync
     image_filenames
   end
 
+
+  def _get_images_list image_ids, resolution
+    image_filenames = []
+    image_ids.each do |image|
+      img = {'sku' => image.part_id, 'id' => image.id, 'resolution' => resolution}
+      image_filenames.push img
+    end
+    image_filenames
+  end
+
+
+
   def get_part_type_specific_image sku
 
   end
@@ -52,7 +64,33 @@ class ImageSync
   end
 
   def get_default_image partname
-    pname = normalize_partname partname
-    @images_folder + "default/#{pname}.jpg"
+    if partname
+      pname = normalize_partname partname
+      @images_folder + "default/#{pname}.jpg"
+    else
+      @images_folder + "default/turbo.jpg"
+    end
+  end
+
+
+  def find_images_list sku, resolution
+    img_ids = ProductImage.where(part_id: sku).order(id: :asc)
+    if img_ids.size > 1
+      _get_images_list img_ids[1..-1], resolution
+    else
+      nil
+    end
+  end
+
+
+  def get_images_list sku, resolution
+      list = find_images_list sku, resolution
+      list.to_json
+  end
+
+
+  def get_image_file sku,  resolution, id
+    path = @images_folder + "#{resolution}/#{sku}_#{id}.jpg"
+    path
   end
 end
