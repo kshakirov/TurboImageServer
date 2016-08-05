@@ -12,22 +12,30 @@ configure do
   set :image_syncer, ImageSync.new(ENV['METADATA_IMAGES_COLLECTION'])
 end
 
+before do
+  headers 'Content-Type' => 'image/jpeg'
+end
+
 
 get '/part/:partname/product/:sku/image/:resolution' do
-    send_file(settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution]), :filename => 'image', :type => 'Application/octet-stream')
+    content_type 'image/jpeg'
+    send_file(settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution]), :filename => 'image', :type => 'image/jpeg')
 end
 
 get '/part/:partname/product/image/:resolution' do
-  send_file(settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution]), :filename => 'image', :type => 'Application/octet-stream')
+  content_type 'image/jpeg'
+  send_file(settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution]), :filename => 'image', :type => 'image/jpeg')
 end
 
 get '/product/:sku/image_gallary/:resolution' do
+  content_type 'image/jpeg'
   settings.image_syncer.get_images_list params[:sku], params[:resolution]
 end
 
 get '/product/:sku/resolution/:resolution/image/:id' do
+  content_type 'image/jpeg'
   image = settings.image_syncer.get_image_file params[:sku], params[:resolution], params[:id]
-  send_file(image, :filename => image, :type => 'Application/octet-stream')
+  send_file(image, :filename => image, :type => 'image/jpeg')
 end
 
 
