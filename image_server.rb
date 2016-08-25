@@ -1,6 +1,7 @@
 require 'sinatra'
 require "sinatra/activerecord"
 require 'uri'
+require 'mini_magick'
 require 'active_support/all'
 require_relative 'lib/src/sync'
 
@@ -10,6 +11,7 @@ set :images_collection, ENV['METADATA_IMAGES_COLLECTION']
 
 configure do
   set :image_syncer, ImageSync.new(ENV['METADATA_IMAGES_COLLECTION'])
+  set :image_processor, ImageProcessor.new
 end
 
 before do
@@ -19,7 +21,8 @@ end
 
 get '/part/:partname/product/:sku/image/:resolution' do
     content_type 'image/jpeg'
-    send_file(settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution]), :filename => 'image', :type => 'image/jpeg')
+    image_name = settings.image_syncer.get_image(params[:partname], params[:sku], params[:resolution])
+    settings.image_processor.run image_name
 end
 
 get '/part/:partname/product/image/:resolution' do

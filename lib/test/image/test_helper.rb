@@ -1,3 +1,4 @@
+require 'mini_magick'
 require 'minitest'
 require 'minitest/autorun'
 require 'sinatra'
